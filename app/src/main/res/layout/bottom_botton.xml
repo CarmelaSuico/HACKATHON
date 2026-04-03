@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:layout_gravity="bottom">
+
+    <!--        This is the bottom botton-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/nav_bar_bg"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+<!--home botton-->
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/imghome"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:srcCompat="@drawable/bus_railway_24px"
+                android:background="@null"
+                app:tint="@color/white"
+                android:scaleType="fitCenter"/>
+            <TextView
+                android:id="@+id/txthome"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="HOME"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+<!--        Search botton-->
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/imgsearch"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:srcCompat="@drawable/search_24px"
+                android:background="@null"
+                app:tint="@color/white"
+                android:scaleType="fitCenter"/>
+            <TextView
+                android:id="@+id/txtsearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="SEARCH"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+<!--        Settings-->
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/imgsettings"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:srcCompat="@drawable/settings_24px"
+                android:background="@null"
+                app:tint="@color/white"
+                android:scaleType="fitCenter"/>
+            <TextView
+                android:id="@+id/txtsetting"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="SETTINGS"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
