@@ -14,8 +14,8 @@ import org.osmdroid.api.IMapController;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MapView map = null;
-    private ImageButton btnHome, btnSearch, btnSettings;
+    MapView map = null;
+    ImageButton btnHome, btnSearch, btnSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

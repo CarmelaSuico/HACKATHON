@@ -29,17 +29,25 @@ import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private MapView map;
-    private EditText editOrigin, editDestination;
+    MapView map;
+    EditText editOrigin, editDestination;
+    ImageButton btnHome;
+    Button btnSearch;
+    FloatingActionButton btnZoomIn, btnZoomOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        Finding the ids
+        btnZoomIn = findViewById(R.id.btn_zoom_in);
+        btnZoomOut = findViewById(R.id.btn_zoom_out);
+        btnHome = findViewById(R.id.imghome);
+        map = findViewById(R.id.search_map);
+
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         setContentView(R.layout.activity_search);
 
-        map = findViewById(R.id.search_map);
         editOrigin = findViewById(R.id.edit_origin);
         editDestination = findViewById(R.id.edit_destination);
 
@@ -49,7 +57,6 @@ public class SearchActivity extends AppCompatActivity {
         map.getController().setCenter(new GeoPoint(10.3157, 123.8854));
 
         // NAVIGATION LOGIC
-        ImageButton btnHome = findViewById(R.id.imghome);
         btnHome.setOnClickListener(v -> {
             android.content.Intent intent = new android.content.Intent(SearchActivity.this, MainActivity.class);
             startActivity(intent);
@@ -57,7 +64,7 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         // THE NEW SEARCH BUTTON LOGIC
-        Button btnSearch = findViewById(R.id.btnsearch); // Linked to your bottom nav search icon
+        btnSearch = findViewById(R.id.btnsearch); // Linked to your bottom nav search icon
         btnSearch.setOnClickListener(v -> validateAndStartRouting());
 
         // Keyboard "Enter" trigger
@@ -68,10 +75,6 @@ public class SearchActivity extends AppCompatActivity {
             }
             return false;
         });
-
-        // Add these to your onCreate method
-        FloatingActionButton btnZoomIn = findViewById(R.id.btn_zoom_in);
-        FloatingActionButton btnZoomOut = findViewById(R.id.btn_zoom_out);
 
         btnZoomIn.setOnClickListener(v -> {
             map.getController().zoomIn();
