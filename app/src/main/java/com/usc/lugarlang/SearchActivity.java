@@ -39,50 +39,62 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        Finding the ids
-        btnZoomIn = findViewById(R.id.btn_zoom_in);
-        btnZoomOut = findViewById(R.id.btn_zoom_out);
-        btnHome = findViewById(R.id.imghome);
-        map = findViewById(R.id.search_map);
-
+        // 1. Load configuration BEFORE setting content view
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+
+        // 2. Set the layout
         setContentView(R.layout.activity_search);
 
+        // 3. NOW find the IDs (Always after setContentView)
+        map = findViewById(R.id.search_map);
         editOrigin = findViewById(R.id.edit_origin);
         editDestination = findViewById(R.id.edit_destination);
+        btnHome = findViewById(R.id.imghome);
+        btnSearch = findViewById(R.id.btnsearch);
+        btnZoomIn = findViewById(R.id.btn_zoom_in);
+        btnZoomOut = findViewById(R.id.btn_zoom_out);
 
-        map.setTileSource(TileSourceFactory.MAPNIK);
-        map.setMultiTouchControls(true);
-        map.getController().setZoom(15.0);
-        map.getController().setCenter(new GeoPoint(10.3157, 123.8854));
+        // 4. Setup Map Initial State
+        if (map != null) {
+            map.setTileSource(TileSourceFactory.MAPNIK);
+            map.setMultiTouchControls(true);
+            map.getController().setZoom(15.0);
+            map.getController().setCenter(new GeoPoint(10.3157, 123.8854));
+        }
 
         // NAVIGATION LOGIC
-        btnHome.setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(SearchActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        });
+        if (btnHome != null) {
+            btnHome.setOnClickListener(v -> {
+                android.content.Intent intent = new android.content.Intent(SearchActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            });
+        }
 
-        // THE NEW SEARCH BUTTON LOGIC
-        btnSearch = findViewById(R.id.btnsearch); // Linked to your bottom nav search icon
-        btnSearch.setOnClickListener(v -> validateAndStartRouting());
+        // SEARCH BUTTON LOGIC
+        if (btnSearch != null) {
+            btnSearch.setOnClickListener(v -> validateAndStartRouting());
+        }
 
         // Keyboard "Enter" trigger
-        editDestination.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
-                validateAndStartRouting();
-                return true;
-            }
-            return false;
-        });
+        if (editDestination != null) {
+            editDestination.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    validateAndStartRouting();
+                    return true;
+                }
+                return false;
+            });
+        }
 
-        btnZoomIn.setOnClickListener(v -> {
-            map.getController().zoomIn();
-        });
+        // ZOOM LOGIC
+        if (btnZoomIn != null) {
+            btnZoomIn.setOnClickListener(v -> map.getController().zoomIn());
+        }
 
-        btnZoomOut.setOnClickListener(v -> {
-            map.getController().zoomOut();
-        });
+        if (btnZoomOut != null) {
+            btnZoomOut.setOnClickListener(v -> map.getController().zoomOut());
+        }
     }
 
     private void validateAndStartRouting() {
@@ -99,9 +111,7 @@ public class SearchActivity extends AppCompatActivity {
     private void startNavigation(String originName, String destName) {
         new Thread(() -> {
             try {
-                // Using UserAgent is required by OSM servers
                 GeocoderNominatim geocoder = new GeocoderNominatim("LugarLang_App");
-
                 List<Address> startAddresses = geocoder.getFromLocationName(originName + ", Cebu", 1);
                 List<Address> endAddresses = geocoder.getFromLocationName(destName + ", Cebu", 1);
 
@@ -118,12 +128,11 @@ public class SearchActivity extends AppCompatActivity {
                     Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
 
                     roadOverlay.setColor(Color.parseColor("#B0006D"));
-                    roadOverlay.setWidth(30.0f);
+                    roadOverlay.setWidth(20.0f); // 30.0f is very thick, 20.0f is usually better for street visibility
 
                     runOnUiThread(() -> {
                         map.getOverlays().clear();
                         map.getOverlays().add(roadOverlay);
-                        // Animate to center the route
                         map.getController().animateTo(startPoint);
                         map.invalidate();
                         Toast.makeText(this, "Route Found!", Toast.LENGTH_SHORT).show();
@@ -138,6 +147,6 @@ public class SearchActivity extends AppCompatActivity {
         }).start();
     }
 
-    @Override public void onResume() { super.onResume(); map.onResume(); }
-    @Override public void onPause() { super.onPause(); map.onPause(); }
+    @Override public void onResume() { super.onResume(); if (map != null) map.onResume(); }
+    @Override public void onPause() { super.onPause(); if (map != null) map.onPause(); }
 }
